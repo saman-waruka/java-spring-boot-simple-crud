@@ -1,0 +1,20 @@
+version: "3.4"
+
+services:
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_server
+    environment:
+      - ACCEPT_EULA=Y # Accept Microsoft's End User License Agreement
+      - SA_PASSWORD=StrongDeveloperPassword123! # Set a strong password for the SA account
+      - MSSQL_PID=Developer # Use the Developer edition (you can use `Express`
+    ports:
+      - "1433:1433" # Expose the default SQL Server port
+    volumes:
+      - ./mssql_data:/var/opt/mssql # Attach a volume for data persistence
+      - ./init-user.sql:/docker-entrypoint-initdb.d/init-user.sql
+    restart: unless-stopped
+
+volumes:
+  mssql_data:
+    driver: local
